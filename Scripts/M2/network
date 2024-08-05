@@ -1,0 +1,18 @@
+#!/bin/bash
+
+# captura o endereço de rede (os três primeiros octetos) e salva em arquivo
+ifconfig | grep "broadcast" | cut -d "n" -f 2 | cut -d " " -f 2 | cut -d "." -f 1,2,3 > rede
+
+# atribui o conteúdo do arquivo rede a variável
+REDE=$(cat rede)
+
+# verificando rede
+for ip in $(seq 254) # a sequência faz com que loops sejam feitos de 1 até 254
+do
+	# junta o endereço com os valores da seq e faz o ping e adiciona o retorno ao arquivo
+	ping -c 1 $REDE.$ip | grep "64" | cut -d " " -f 4 | cut -d ":" -f 1 >> resultado &
+	# o & permite que todos os loops sejam feitos ao mesmo tempo
+done
+
+# o nmap vai fazer a varredura nos endereços do arquivo nas portas especificadas
+nmap -p 22,80,443,53 -iL resultado

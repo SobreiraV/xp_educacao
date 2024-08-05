@@ -1,0 +1,17 @@
+#!/bin/bash
+echo "Executar? (s/n)"
+read RESPOSTA
+if [ $RESPOSTA != "s" ]
+then
+	echo "Execução interrompida"
+	exit
+else
+	echo "buscando dados sobre o sistema."
+	echo "..............................."
+	echo "Data e hora:"
+	date
+	echo "Uso do disco:"
+	df
+	echo "Usuários logados:"
+	w
+fi
